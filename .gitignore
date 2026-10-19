@@ -1,0 +1,29 @@
+# Build artifacts
+android-client/.gradle/
+android-client/.gradle-home/
+android-client/app/build/
+android-client/build/
+android-client/X.gradle-home/
+android-client/test-output/
+web-client/build/
+web-client/test-output/
+web-client/node_modules/
+**/node_modules/
+**/.idea/
+*.iml
+
+# Local configuration / secrets
+android-client/local.properties
+**/sm2.config.local.json
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Large / generated inputs
+base.apk
+decompiled/
+
+# OS
+.DS_Store
+Thumbs.db

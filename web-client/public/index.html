@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>eFaceGo 接口薄客户端</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">APK API CLIENT</p>
+      <h1>eFaceGo 接口薄客户端</h1>
+      <p>调用原 APK 的服务端接口，不重写考勤、围栏或人脸业务逻辑。</p>
+    </div>
+  </header>
+
+  <main>
+    <form id="client-form" autocomplete="off">
+      <section class="panel" aria-labelledby="server-title">
+        <div class="section-heading">
+          <span class="step">1</span>
+          <div>
+            <h2 id="server-title">服务器与账号</h2>
+            <p>只填写协议、主机和可选端口；实际请求路径由客户端按 APK 拼接。</p>
+          </div>
+        </div>
+        <div class="grid two">
+          <label class="field wide">
+            <span>服务器地址</span>
+            <input id="base-url" name="baseUrl" type="url" placeholder="http://ifaceattend.hwzy99.com" required>
+            <small>例如 http://192.168.1.10:8080</small>
+          </label>
+          <label class="field">
+            <span>用户名</span>
+            <input id="user-name" name="userName" type="text" required>
+          </label>
+          <label class="field">
+            <span>密码</span>
+            <input id="password" name="pwd" type="password" required>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="punch-title">
+        <div class="section-heading">
+          <span class="step">2</span>
+          <div>
+            <h2 id="punch-title">打卡时间与地点</h2>
+            <p>默认保持原 APK 时间语义；自定义模式会同时覆盖 checkLocation 和 addCard 的时间。</p>
+          </div>
+        </div>
+        <div class="grid two">
+          <label class="field">
+            <span>时间模式</span>
+            <select id="time-mode" name="timeMode">
+              <option value="apk">跟随原 APK</option>
+              <option value="custom">自定义时间</option>
+            </select>
+            <small id="time-hint">checkLocation 用当前时间；addCard.time 留空</small>
+          </label>
+          <label class="field">
+            <span>自定义时间</span>
+            <input id="custom-time" name="customTime" type="datetime-local" step="1" disabled>
+            <small>按本机时区解释为 yyyy-MM-dd HH:mm:ss</small>
+          </label>
+          <label class="field wide">
+            <span>地点名称（gps）</span>
+            <input id="gps" name="gps" type="text" placeholder="例如：北京市海淀区中关村" required>
+          </label>
+          <label class="field">
+            <span>纬度（lat）</span>
+            <input id="lat" name="lat" type="number" min="-90" max="90" step="any" placeholder="39.904200" required>
+            <small>提交前统一格式化为六位小数</small>
+          </label>
+          <label class="field">
+            <span>经度（lng）</span>
+            <input id="lng" name="lng" type="number" min="-180" max="180" step="any" placeholder="116.407400" required>
+            <small>提交前统一格式化为六位小数</small>
+          </label>
+          <label class="field">
+            <span>usedMap</span>
+            <select id="used-map" name="usedMap">
+              <option value="0">0 — 天地图路径</option>
+              <option value="1">1 — 高德路径</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>currSysVer</span>
+            <input id="curr-sys-ver" name="currSysVer" type="number" min="1" step="1" value="28" required>
+            <small>原 APK 读取设备 Build.VERSION.SDK_INT；Web 中需明确指定</small>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="photo-title">
+        <div class="section-heading">
+          <span class="step">3</span>
+          <div>
+            <h2 id="photo-title">人脸 JPEG 照片</h2>
+            <p>按原字段 photo 上传。这里只对接接口，不执行 APK 的 native 人脸比对或活体判定。</p>
+          </div>
+        </div>
+        <label class="file-picker" for="photo">
+          <span class="file-button">选择 JPEG</span>
+          <span id="photo-name">未选择文件</span>
+          <input id="photo" name="photo" type="file" accept="image/jpeg,.jpg,.jpeg">
+        </label>
+        <div class="photo-preview-wrap" hidden>
+          <img id="photo-preview" class="photo-preview" alt="待上传照片预览">
+        </div>
+      </section>
+
+      <details class="panel protocol-details">
+        <summary>原 APK 协议与请求头</summary>
+        <dl class="identity-grid">
+          <div><dt>User-Agent</dt><dd>okhttp/3.11.0</dd></div>
+          <div><dt>Content-Type</dt><dd>application/x-www-form-urlencoded</dd></div>
+          <div><dt>appVer</dt><dd>1.0.15.79.20240816</dd></div>
+          <div><dt>appVerCode</dt><dd>41</dd></div>
+          <div><dt>systemName</dt><dd>Android</dd></div>
+          <div><dt>照片编码</dt><dd>Android Base64.DEFAULT</dd></div>
+        </dl>
+        <p class="note">不转发浏览器 User-Agent、Sec-Fetch、Origin 等请求头，也不附加 IMEI、MAC、设备 IP 或额外指纹字段。</p>
+      </details>
+
+      <label class="authorization">
+        <input id="authorized" type="checkbox">
+        <span>我确认仅在自己管理或明确授权的测试环境与账号上使用。</span>
+      </label>
+
+      <div class="actions">
+        <button id="login-button" class="button secondary" type="button">仅测试登录</button>
+        <button id="punch-button" class="button primary" type="button">按原接口链路打卡</button>
+      </div>
+      <p class="action-note">链路：login.do → checkLocation.do → addCard.do 或 SM2/SM4 TCP PostMobileRecord（由登录下发配置决定）</p>
+    </form>
+
+    <section id="status" class="status" role="status" aria-live="polite" hidden></section>
+    <section id="results" aria-label="接口请求与响应"></section>
+  </main>
+
+  <footer>
+    <p>本地回环服务 · 不保存账号、token 或照片 · 不上传至第三方</p>
+  </footer>
+  <script src="/app.js"></script>
+</body>
+</html>

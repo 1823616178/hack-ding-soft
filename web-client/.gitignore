@@ -1,0 +1,4 @@
+node_modules/
+build/
+test-output/
+sm2.config.local.json

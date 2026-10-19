@@ -1,0 +1,22 @@
+﻿<resources>
+    <string name="app_name">eFaceGo 考勤终端</string>
+
+    <color name="primary">#1E40AF</color>
+    <color name="primary_dark">#1E3A8A</color>
+    <color name="accent">#2563EB</color>
+    <color name="background">#F8FAFC</color>
+
+    <style name="AppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:navigationBarColor">#FFFFFFFF</item>
+    </style>
+
+    <style name="AppTheme.Fullscreen" parent="@android:style/Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">#FF000000</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

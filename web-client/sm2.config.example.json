@@ -1,0 +1,8 @@
+{
+  "ownerId": "汉王人脸仪客户端",
+  "curve": "sm2p256v1",
+  "privateKey": "<64-hex-private-key>",
+  "publicKeyX": "<64-hex-public-x>",
+  "publicKeyY": "<64-hex-public-y>",
+  "uppercase": true
+}
